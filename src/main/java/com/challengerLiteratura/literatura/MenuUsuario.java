@@ -29,7 +29,17 @@ public class MenuUsuario {
             Scanner scanner = new Scanner(System.in);
             boolean esEntero = scanner.hasNextInt();
             if(esEntero)
-            {   opcionMenu = scanner.nextInt();
+            {
+                opcionMenu = scanner.nextInt();
+                if((opcionMenu >=0) && (opcionMenu<=5) )
+                {
+                    condicionSalida =0;
+                }
+                else
+                {
+                    System.out.println("Intentelo de nuevo");
+                    opcionMenu = -1;
+                }
             }
             else
             {
