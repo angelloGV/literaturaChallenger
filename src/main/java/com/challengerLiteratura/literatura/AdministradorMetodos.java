@@ -1,6 +1,8 @@
 package com.challengerLiteratura.literatura;
 
 import com.challengerLiteratura.literaturaAPI.consultaAPI;
+import com.challengerLiteratura.unidadData.APIRespuesta;
+import com.challengerLiteratura.unidadData.Conversor;
 import com.challengerLiteratura.unidadData.Libro;
 
 import java.util.ArrayList;
@@ -10,7 +12,8 @@ import java.util.Scanner;
 public class AdministradorMetodos {
 
     private List<Libro> libros = new ArrayList<>();
-    consultaAPI consulta = new consultaAPI();
+    private Conversor conversor = new Conversor();
+    private consultaAPI consulta = new consultaAPI();
 
     Scanner scanner = new Scanner(System.in);
 
@@ -68,10 +71,10 @@ public class AdministradorMetodos {
             }
         }
 
+        String json = consulta.getDataAPI(tituloLibro);
+        var libros = conversor.obtenerDatos(json, APIRespuesta.class);
+        //System.out.println(libro.toString());
 
-        Libro libro = new Libro();
-        String result = consulta.getDataAPI(tituloLibro);
-        System.out.println(result);
     }
 
 
