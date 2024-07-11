@@ -3,11 +3,14 @@ package com.challengerLiteratura.literatura;
 import com.challengerLiteratura.literaturaAPI.consultaAPI;
 import com.challengerLiteratura.unidadData.APIRespuesta;
 import com.challengerLiteratura.unidadData.Conversor;
+import com.challengerLiteratura.unidadData.DatosLibro;
 import com.challengerLiteratura.unidadData.Libro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AdministradorMetodos {
 
@@ -72,8 +75,38 @@ public class AdministradorMetodos {
         }
 
         String json = consulta.getDataAPI(tituloLibro);
-        var libros = conversor.obtenerDatos(json, APIRespuesta.class);
-        //System.out.println(libro.toString());
+        var result = conversor.obtenerDatos(json, APIRespuesta.class).results();
+
+        Optional<DatosLibro> libroBusqueda = result.stream()
+                       .filter(d -> d. titulo().toLowerCase().
+                               contains(tituloLibro.toLowerCase())).findFirst();
+
+        if(libroBusqueda.isPresent())
+        {
+            DatosLibro dataLibro = libroBusqueda.get();
+            Optional<Libro> libro = dataLibro.autor().stream().
+            map(t-> new Libro(dataLibro.titulo(),t.autor(),t.axoNacimiento(),
+                    t.axoFallecimiento(),dataLibro.idioma())).findFirst();
+
+            if(libro.isPresent())
+            {
+                System.out.println("Los datos del libro buscado son ... \n");
+                Libro libroEncontrado = libro.get();
+                System.out.println(libroEncontrado.toString());
+            }
+            else
+            {
+                System.out.println("Libro no seteado");
+            }
+        }
+        else
+        {
+            System.out.println("Libro no encontrado");
+        }
+
+
+
+
 
     }
 
