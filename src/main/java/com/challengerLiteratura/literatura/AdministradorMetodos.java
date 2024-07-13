@@ -1,33 +1,62 @@
 package com.challengerLiteratura.literatura;
 
+import com.challengerLiteratura.repository.LibroRepository;
 import com.challengerLiteratura.literaturaAPI.consultaAPI;
-import com.challengerLiteratura.unidadData.APIRespuesta;
-import com.challengerLiteratura.unidadData.Conversor;
-import com.challengerLiteratura.unidadData.DatosLibro;
-import com.challengerLiteratura.unidadData.Libro;
+import com.challengerLiteratura.unidadData.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class AdministradorMetodos {
 
     private List<Libro> libros = new ArrayList<>();
     private Conversor conversor = new Conversor();
     private consultaAPI consulta = new consultaAPI();
+    private LibroRepository libroRepository;
+    private int condicionSalida = 1;
+    private int opcionMenu = -1;
 
     Scanner scanner = new Scanner(System.in);
 
     private String tituloLibro;
     private int caso = -1;
+
     public AdministradorMetodos() {}
 
-    public AdministradorMetodos(int value)
+    public AdministradorMetodos(LibroRepository libroRepository) {
+        this.libroRepository = libroRepository;
+    }
+
+    public void mostrarMenu()
     {
-        caso = value;
-        switch (value)
+        while(condicionSalida != 0) {
+            var menu = """
+                    1- buscar libro por titulo
+                    2- listar libros registrados
+                    3- listar autores registrados
+                    4- listar autores vivos en un determinado año
+                    5- listar libros por idioma
+                    0- salir
+                    """;
+            System.out.println(menu);
+            Scanner scanner = new Scanner(System.in);
+            boolean esEntero = scanner.hasNextInt();
+            if (esEntero) {
+                opcionMenu = scanner.nextInt();
+                if ((opcionMenu >= 0) && (opcionMenu <= 5)) {
+                    condicionSalida = 0;
+                } else {
+                    System.out.println("Intentelo de nuevo");
+                    opcionMenu = -1;
+                }
+            } else {
+                System.out.println("Intentelo de nuevo");
+            }
+        }
+
+        switch (opcionMenu)
         {
             case 1:
                 buscarLibroPorTitulo();
@@ -84,30 +113,19 @@ public class AdministradorMetodos {
         if(libroBusqueda.isPresent())
         {
             DatosLibro dataLibro = libroBusqueda.get();
-            Optional<Libro> libro = dataLibro.autor().stream().
-            map(t-> new Libro(dataLibro.titulo(),t.autor(),t.axoNacimiento(),
-                    t.axoFallecimiento(),dataLibro.idioma())).findFirst();
+            DatosAutor datosAutor = dataLibro.autor().get(0);
+            Autor autor = new Autor(datosAutor);
+            Libro libroActual = new Libro(dataLibro);
+            System.out.println(libroActual.toString());
+            //System.out.println(autor.toString());
 
-            if(libro.isPresent())
-            {
-                System.out.println("Los datos del libro buscado son ... \n");
-                Libro libroEncontrado = libro.get();
-                System.out.println(libroEncontrado.toString());
-            }
-            else
-            {
-                System.out.println("Libro no seteado");
-            }
+            //SAVE BOOK SAVE AUTOR
+            libroRepository.save(libroActual);
         }
         else
         {
             System.out.println("Libro no encontrado");
         }
-
-
-
-
-
     }
 
 
