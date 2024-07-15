@@ -1,5 +1,6 @@
-package com.challengerLiteratura.unidadData;
+package com.challengerLiteratura.principal;
 
+import com.challengerLiteratura.unidadData.DatosLibro;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
 import java.util.ArrayList;
@@ -16,14 +17,17 @@ public class Libro {
     @Column(unique = true)
     private String titulo ="";
 
-    private String autor = "";
+    private String autorNombre = "";
     private List<String> idioma = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Autor autor;
 
     public Libro(){}
     public Libro(DatosLibro dataLibro)
     {
         this.titulo = dataLibro.titulo();
-        this.autor = dataLibro.autor().get(0).autor();
+        this.autorNombre = dataLibro.autor().get(0).autor();
         this.idioma = dataLibro.idioma();
     }
 
@@ -45,4 +49,13 @@ public class Libro {
         return result.toString();*/
         return "";
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

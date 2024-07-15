@@ -10,7 +10,10 @@ public class MenuUsuario {
     public int getOpcionMenu() {
         return opcionMenu;
     }
-
+public MenuUsuario()
+{
+    System.out.println("Inicio correctamente");
+}
     void MenuUsuario(){
         while(condicionSalida != 0) {
             var menu = """

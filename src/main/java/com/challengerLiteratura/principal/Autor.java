@@ -1,5 +1,6 @@
-package com.challengerLiteratura.unidadData;
+package com.challengerLiteratura.principal;
 
+import com.challengerLiteratura.unidadData.DatosAutor;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -7,18 +8,17 @@ import java.util.List;
 @Entity
 @Table(name = "Autores")
 public class Autor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Libro> listaLibros;
+
     private String name;
     private Integer axoNacimiento;
     private Integer axoFallecimiento;
 
-    @Transient
-    private List<Libro> listaLibros;
 
     public Autor(){}
     public Autor(DatosAutor dataAutor

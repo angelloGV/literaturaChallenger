@@ -1,6 +1,9 @@
 package com.challengerLiteratura.literatura;
 
-import com.challengerLiteratura.repository.LibroRepository;
+import com.challengerLiteratura.principal.Autor;
+import com.challengerLiteratura.principal.Libro;
+import com.challengerLiteratura.principal.AutorRepository;
+import com.challengerLiteratura.principal.LibroRepository;
 import com.challengerLiteratura.literaturaAPI.consultaAPI;
 import com.challengerLiteratura.unidadData.*;
 
@@ -14,23 +17,24 @@ public class AdministradorMetodos {
     private List<Libro> libros = new ArrayList<>();
     private Conversor conversor = new Conversor();
     private consultaAPI consulta = new consultaAPI();
-    private LibroRepository libroRepository;
     private int condicionSalida = 1;
     private int opcionMenu = -1;
-
     Scanner scanner = new Scanner(System.in);
-
     private String tituloLibro;
     private int caso = -1;
 
+    private AutorRepository autorRepository;
+    private LibroRepository libroRepository;
+
     public AdministradorMetodos() {}
 
-    public AdministradorMetodos(LibroRepository libroRepository) {
-        this.libroRepository = libroRepository;
-    }
 
-    public void mostrarMenu()
-    {
+    public AdministradorMetodos(LibroRepository librorefactory,
+                                AutorRepository autorRepository) {
+
+        this.libroRepository = librorefactory;
+        this.autorRepository = autorRepository;
+
         while(condicionSalida != 0) {
             var menu = """
                     1- buscar libro por titulo
@@ -120,7 +124,7 @@ public class AdministradorMetodos {
             //System.out.println(autor.toString());
 
             //SAVE BOOK SAVE AUTOR
-            libroRepository.save(libroActual);
+            //libroRepository.save(libroActual);
         }
         else
         {
